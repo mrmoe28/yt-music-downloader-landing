@@ -27,7 +27,8 @@ export default function SubscribeButton({ planId, planName, clerkPlanId, classNa
       await createCheckoutSession(planId, clerkPlanId)
     } catch (error) {
       console.error('Error creating checkout session:', error)
-      alert('Something went wrong. Please try again.')
+      // Don't show alert on page load - only show error if user actually clicks
+      // alert('Something went wrong. Please try again.')
     } finally {
       setIsLoading(false)
     }

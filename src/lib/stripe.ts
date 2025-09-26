@@ -1,8 +1,15 @@
-import { loadStripe } from '@stripe/stripe-js'
+import { loadStripe, Stripe } from '@stripe/stripe-js'
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
+let stripePromise: Promise<Stripe | null> | null = null
 
-export default stripePromise
+const getStripe = () => {
+  if (!stripePromise) {
+    stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
+  }
+  return stripePromise
+}
+
+export default getStripe
 
 export const createCheckoutSession = async (planId: string, clerkPlanId?: string) => {
   try {
@@ -20,7 +27,7 @@ export const createCheckoutSession = async (planId: string, clerkPlanId?: string
 
     const { sessionId } = await response.json()
 
-    const stripe = await stripePromise
+    const stripe = await getStripe()
     if (!stripe) {
       throw new Error('Stripe failed to load')
     }
