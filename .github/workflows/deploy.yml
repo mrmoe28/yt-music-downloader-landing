@@ -1,8 +1,8 @@
-name: Deploy to GitHub Pages
+# Disabled - Using Vercel for deployment instead
+# GitHub Pages doesn't support Server Actions needed for auth/payments
+name: Deploy to GitHub Pages (DISABLED)
 
 on:
-  push:
-    branches: ["main"]
   workflow_dispatch:
 
 permissions:

@@ -38,7 +38,7 @@ const plans = [
     price: "$9.99",
     period: "per month",
     description: "Unlimited downloads for serious music lovers",
-    planId: "cplan_33EvIiC4CnraLtwa36h5YsbVWy2", // Clerk subscription plan ID
+    planId: "price_1234567890", // Replace with your actual Stripe Price ID
     features: [
       "Unlimited MP3 downloads",
       "320kbps premium quality",
@@ -214,6 +214,7 @@ export default function PricingPage() {
                         <SubscribeButton
                           planId={plan.planId}
                           planName={plan.name}
+                          clerkPlanId="cplan_33EvIiC4CnraLtwa36h5YsbVWy2"
                           className={`w-full ${
                             plan.popular
                               ? `bg-gradient-to-r ${plan.gradient} hover:from-blue-600 hover:to-purple-700`

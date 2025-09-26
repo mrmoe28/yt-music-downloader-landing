@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { planId } = await request.json()
+    const { planId, clerkPlanId } = await request.json()
 
     if (!planId) {
       return NextResponse.json(
@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
       cancel_url: `${request.headers.get('origin')}/pricing`,
       metadata: {
         userId,
-        planId,
+        planId: clerkPlanId || planId, // Use clerkPlanId for metadata, fallback to planId
       },
     })
 
