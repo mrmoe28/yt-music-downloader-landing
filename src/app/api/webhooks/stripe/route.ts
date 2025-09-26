@@ -3,16 +3,19 @@ import { headers } from 'next/headers'
 import Stripe from 'stripe'
 import { clerkClient } from '@clerk/nextjs/server'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2024-10-28.acacia',
-})
-
-const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!
+function getStripe() {
+  return new Stripe(process.env.STRIPE_SECRET_KEY!, {
+    apiVersion: '2025-08-27.basil',
+  })
+}
 
 export async function POST(request: NextRequest) {
   const body = await request.text()
   const headersList = await headers()
   const sig = headersList.get('stripe-signature')!
+
+  const stripe = getStripe()
+  const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!
 
   let event: Stripe.Event
 
