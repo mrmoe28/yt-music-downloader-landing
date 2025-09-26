@@ -36,18 +36,38 @@ export default function SubscribeButton({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          priceId: planId,
+          planId,
           planName,
           clerkPlanId,
         }),
       })
 
       if (!response.ok) {
-        throw new Error('Failed to create checkout session')
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to create checkout session')
       }
 
-      const { url } = await response.json()
-      window.location.href = url
+      const data = await response.json()
+
+      // Handle both sessionId (for Stripe redirect) and direct URL
+      if (data.sessionId) {
+        // Use Stripe.js to redirect to checkout
+        const getStripe = await import('@/lib/stripe').then(m => m.default)
+        const stripe = await getStripe()
+        if (stripe) {
+          const { error } = await stripe.redirectToCheckout({
+            sessionId: data.sessionId,
+          })
+          if (error) {
+            throw new Error(error.message)
+          }
+        }
+      } else if (data.url) {
+        // Direct URL redirect
+        window.location.href = data.url
+      } else {
+        throw new Error('No checkout URL or session ID received')
+      }
     } catch (error) {
       console.error('Error creating checkout session:', error)
       setIsLoading(false)
