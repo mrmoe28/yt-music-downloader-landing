@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth, currentUser } from '@clerk/nextjs/server'
-import { stripe } from '@/lib/stripe-server'
+import { getStripe } from '@/lib/stripe-server'
 import type Stripe from 'stripe'
 
 export async function POST(request: NextRequest) {
@@ -60,6 +60,7 @@ export async function POST(request: NextRequest) {
       },
     }
 
+    const stripe = getStripe()
     const session = await stripe.checkout.sessions.create(sessionConfig)
 
     console.log('Checkout session created:', session.id)
