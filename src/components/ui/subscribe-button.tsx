@@ -13,6 +13,7 @@ interface SubscribeButtonProps {
 
 export default function SubscribeButton({ planId, planName, clerkPlanId, className }: SubscribeButtonProps) {
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleSubscribe = async () => {
     if (!planId) {
@@ -22,31 +23,36 @@ export default function SubscribeButton({ planId, planName, clerkPlanId, classNa
     }
 
     setIsLoading(true)
+    setError(null)
 
     try {
       await createCheckoutSession(planId, clerkPlanId)
     } catch (error) {
       console.error('Error creating checkout session:', error)
-      // Don't show alert on page load - only show error if user actually clicks
-      // alert('Something went wrong. Please try again.')
+      setError('Unable to start checkout. Please try again or contact support.')
     } finally {
       setIsLoading(false)
     }
   }
 
   return (
-    <Button
-      onClick={handleSubscribe}
-      disabled={isLoading}
-      className={className}
-      size="lg"
-    >
-      {isLoading
-        ? 'Loading...'
-        : planName === 'Free Trial'
-        ? 'Go to Dashboard'
-        : 'Subscribe Now'
-      }
-    </Button>
+    <div className="space-y-2">
+      <Button
+        onClick={handleSubscribe}
+        disabled={isLoading}
+        className={className}
+        size="lg"
+      >
+        {isLoading
+          ? 'Loading...'
+          : planName === 'Free Trial'
+          ? 'Go to Dashboard'
+          : 'Subscribe Now'
+        }
+      </Button>
+      {error && (
+        <p className="text-sm text-red-600 text-center">{error}</p>
+      )}
+    </div>
   )
 }

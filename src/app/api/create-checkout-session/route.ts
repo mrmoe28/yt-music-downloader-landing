@@ -13,13 +13,16 @@ export async function POST(request: NextRequest) {
     const { userId } = await auth()
 
     if (!userId) {
+      console.error('No userId found - user not authenticated')
       return NextResponse.json(
-        { error: 'Unauthorized' },
+        { error: 'Unauthorized - Please sign in' },
         { status: 401 }
       )
     }
 
     const { planId, clerkPlanId } = await request.json()
+
+    console.log('Creating checkout session for:', { userId, planId, clerkPlanId })
 
     if (!planId) {
       return NextResponse.json(
@@ -49,11 +52,13 @@ export async function POST(request: NextRequest) {
       },
     })
 
+    console.log('Checkout session created:', session.id)
     return NextResponse.json({ sessionId: session.id })
   } catch (error) {
     console.error('Error creating checkout session:', error)
+    const errorMessage = error instanceof Error ? error.message : 'Internal server error'
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: errorMessage },
       { status: 500 }
     )
   }
