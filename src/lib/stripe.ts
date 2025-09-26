@@ -13,6 +13,8 @@ export default getStripe
 
 export const createCheckoutSession = async (planId: string, clerkPlanId?: string) => {
   try {
+    console.log('Starting checkout session creation...', { planId, clerkPlanId })
+
     const response = await fetch('/api/create-checkout-session', {
       method: 'POST',
       headers: {
@@ -21,27 +23,36 @@ export const createCheckoutSession = async (planId: string, clerkPlanId?: string
       body: JSON.stringify({ planId, clerkPlanId }),
     })
 
+    const data = await response.json()
+
     if (!response.ok) {
-      throw new Error('Failed to create checkout session')
+      console.error('API error:', data.error)
+      throw new Error(data.error || 'Failed to create checkout session')
     }
 
-    const { sessionId } = await response.json()
+    if (!data.sessionId) {
+      console.error('No sessionId in response:', data)
+      throw new Error('Invalid response from server')
+    }
 
+    console.log('Session created, loading Stripe...')
     const stripe = await getStripe()
     if (!stripe) {
       throw new Error('Stripe failed to load')
     }
 
+    console.log('Redirecting to checkout...')
     // Redirect to Stripe Checkout
     const { error } = await stripe.redirectToCheckout({
-      sessionId,
+      sessionId: data.sessionId,
     })
 
     if (error) {
+      console.error('Stripe redirect error:', error)
       throw error
     }
   } catch (error) {
-    console.error('Error creating checkout session:', error)
+    console.error('Error in createCheckoutSession:', error)
     throw error
   }
 }
