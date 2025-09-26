@@ -38,7 +38,7 @@ const plans = [
     price: "$9.99",
     period: "per month",
     description: "Unlimited downloads for serious music lovers",
-    planId: "price_1234567890", // Replace with your actual Stripe Price ID
+    planId: "price_1SBcQjEUI4iqGSxZTP77EM4p", // Stripe Price ID for $9.99/month
     features: [
       "Unlimited MP3 downloads",
       "320kbps premium quality",
