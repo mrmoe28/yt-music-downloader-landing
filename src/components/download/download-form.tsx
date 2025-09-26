@@ -24,10 +24,10 @@ export default function DownloadForm() {
   const [error, setError] = useState<string | null>(null)
 
   // Mock user subscription data - replace with actual subscription logic
-  const userPlan = "free" // This would come from Clerk metadata
-  const downloadsUsed = userPlan === "free" ? 0 : 47
+  const userPlan = "free" as const // This would come from Clerk metadata
+  const downloadsUsed = 0 // This would come from your database
   const downloadsLimit = userPlan === "free" ? 1 : "unlimited"
-  const canDownload = userPlan === "pro" || downloadsUsed === 0
+  const canDownload = userPlan !== "free" || downloadsUsed < 1
 
   const handleDownload = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -123,8 +123,8 @@ export default function DownloadForm() {
             {/* Usage Status */}
             <div className="flex items-center justify-between text-sm">
               <div className="flex items-center space-x-2">
-                <Badge variant={userPlan === "pro" ? "default" : "secondary"}>
-                  {userPlan === "pro" ? (
+                <Badge variant={userPlan !== "free" ? "default" : "secondary"}>
+                  {userPlan !== "free" ? (
                     <>
                       <Crown className="mr-1 h-3 w-3" />
                       Pro Plan
