@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { createCheckoutSession } from '@/lib/stripe'
+import { useUser } from '@clerk/nextjs'
 
 interface SubscribeButtonProps {
   planId: string | null // Stripe Price ID
@@ -14,8 +15,19 @@ interface SubscribeButtonProps {
 export default function SubscribeButton({ planId, planName, clerkPlanId, className }: SubscribeButtonProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const { isSignedIn, isLoaded } = useUser()
 
   const handleSubscribe = async () => {
+    if (!isLoaded) {
+      setError('Loading user data...')
+      return
+    }
+
+    if (!isSignedIn) {
+      setError('Please sign in to continue')
+      return
+    }
+
     if (!planId) {
       // Free trial - redirect to dashboard
       window.location.href = '/dashboard'
@@ -26,10 +38,12 @@ export default function SubscribeButton({ planId, planName, clerkPlanId, classNa
     setError(null)
 
     try {
+      console.log('Button clicked - starting checkout...')
       await createCheckoutSession(planId, clerkPlanId)
     } catch (error) {
-      console.error('Error creating checkout session:', error)
-      setError('Unable to start checkout. Please try again or contact support.')
+      console.error('Error in subscribe button:', error)
+      const errorMessage = error instanceof Error ? error.message : 'Unable to start checkout'
+      setError(errorMessage)
     } finally {
       setIsLoading(false)
     }
