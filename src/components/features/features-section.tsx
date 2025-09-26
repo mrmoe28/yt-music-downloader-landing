@@ -72,50 +72,60 @@ const features = [
 
 export default function FeaturesSection() {
   return (
-    <section className="py-24 sm:py-32 bg-white">
+    <section className="py-24 sm:py-32 bg-background">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         {/* Section Header */}
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-base font-semibold leading-7 text-blue-600">
+        <div className="mx-auto max-w-3xl text-center">
+          <h2 className="text-base font-semibold leading-7 text-primary mb-4">
             Powerful Features
           </h2>
-          <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            Everything you need for perfect downloads
+          <p className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl leading-tight">
+            Everything you need for{" "}
+            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              perfect downloads
+            </span>
           </p>
-          <p className="mt-6 text-lg leading-8 text-gray-600">
+          <p className="mt-8 text-xl leading-relaxed text-muted-foreground max-w-2xl mx-auto">
             Professional-grade tools designed for music enthusiasts who demand quality,
             speed, and reliability in their downloading experience.
           </p>
         </div>
 
         {/* Features Grid */}
-        <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
+        <div className="mx-auto mt-20 max-w-2xl sm:mt-24 lg:mt-28 lg:max-w-none">
           <div className="grid max-w-xl grid-cols-1 gap-8 lg:max-w-none lg:grid-cols-3">
             {features.map((feature, index) => {
               const IconComponent = feature.icon
               return (
-                <Card key={index} className="group relative overflow-hidden border-0 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                <Card key={index} className="group relative overflow-hidden border-0 bg-card/50 backdrop-blur-sm shadow-lg transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 hover:scale-105">
                   <CardHeader className="pb-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-purple-600">
-                        <IconComponent className="h-6 w-6 text-white" />
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="relative">
+                        <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg blur-sm opacity-75 group-hover:opacity-100 transition-opacity duration-300" />
+                        <div className="relative flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-purple-600">
+                          <IconComponent className="h-6 w-6 text-white" />
+                        </div>
                       </div>
-                      <Badge variant="secondary" className="text-xs">
+                      <Badge
+                        variant="secondary"
+                        className="text-xs bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200/50 text-blue-700 dark:from-blue-950/50 dark:to-purple-950/50 dark:border-blue-800/50 dark:text-blue-300"
+                      >
                         {feature.badge}
                       </Badge>
                     </div>
-                    <CardTitle className="text-xl font-semibold leading-7 text-gray-900">
+                    <CardTitle className="text-xl font-semibold leading-7 text-foreground group-hover:text-primary transition-colors duration-300">
                       {feature.title}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="pt-0">
-                    <CardDescription className="text-base text-gray-600 leading-relaxed">
+                    <CardDescription className="text-base text-muted-foreground leading-relaxed">
                       {feature.description}
                     </CardDescription>
                   </CardContent>
 
-                  {/* Hover effect gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  {/* Enhanced hover effect gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-all duration-500" />
+                  <div className="absolute inset-0 ring-1 ring-border/50 rounded-lg group-hover:ring-primary/20 transition-all duration-300" />
                 </Card>
               )
             })}
