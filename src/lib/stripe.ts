@@ -4,14 +4,14 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 
 export default stripePromise
 
-export const createCheckoutSession = async (planId: string) => {
+export const createCheckoutSession = async (planId: string, clerkPlanId?: string) => {
   try {
     const response = await fetch('/api/create-checkout-session', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ planId }),
+      body: JSON.stringify({ planId, clerkPlanId }),
     })
 
     if (!response.ok) {

@@ -5,12 +5,13 @@ import { Button } from '@/components/ui/button'
 import { createCheckoutSession } from '@/lib/stripe'
 
 interface SubscribeButtonProps {
-  planId: string | null
+  planId: string | null // Stripe Price ID
   planName: string
+  clerkPlanId?: string // Clerk Plan ID
   className?: string
 }
 
-export default function SubscribeButton({ planId, planName, className }: SubscribeButtonProps) {
+export default function SubscribeButton({ planId, planName, clerkPlanId, className }: SubscribeButtonProps) {
   const [isLoading, setIsLoading] = useState(false)
 
   const handleSubscribe = async () => {
@@ -23,7 +24,7 @@ export default function SubscribeButton({ planId, planName, className }: Subscri
     setIsLoading(true)
 
     try {
-      await createCheckoutSession(planId)
+      await createCheckoutSession(planId, clerkPlanId)
     } catch (error) {
       console.error('Error creating checkout session:', error)
       alert('Something went wrong. Please try again.')
