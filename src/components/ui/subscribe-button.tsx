@@ -1,72 +1,80 @@
 'use client'
 
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { createCheckoutSession } from '@/lib/stripe'
-import { useUser } from '@clerk/nextjs'
+import { Button } from "@/components/ui/button"
+import { Crown, Loader2 } from "lucide-react"
+import { useState } from "react"
 
 interface SubscribeButtonProps {
-  planId: string | null // Stripe Price ID
+  planId?: string | null
   planName: string
-  clerkPlanId?: string // Clerk Plan ID
+  clerkPlanId?: string
   className?: string
 }
 
-export default function SubscribeButton({ planId, planName, clerkPlanId, className }: SubscribeButtonProps) {
+export default function SubscribeButton({
+  planId,
+  planName,
+  clerkPlanId,
+  className
+}: SubscribeButtonProps) {
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const { isSignedIn, isLoaded } = useUser()
 
   const handleSubscribe = async () => {
-    if (!isLoaded) {
-      setError('Loading user data...')
-      return
-    }
-
-    if (!isSignedIn) {
-      setError('Please sign in to continue')
-      return
-    }
-
     if (!planId) {
-      // Free trial - redirect to dashboard
+      // For free trial, just redirect to dashboard
       window.location.href = '/dashboard'
       return
     }
 
     setIsLoading(true)
-    setError(null)
 
     try {
-      console.log('Button clicked - starting checkout...')
-      await createCheckoutSession(planId, clerkPlanId)
+      // Create Stripe checkout session
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          priceId: planId,
+          planName,
+          clerkPlanId,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to create checkout session')
+      }
+
+      const { url } = await response.json()
+      window.location.href = url
     } catch (error) {
-      console.error('Error in subscribe button:', error)
-      const errorMessage = error instanceof Error ? error.message : 'Unable to start checkout'
-      setError(errorMessage)
-    } finally {
+      console.error('Error creating checkout session:', error)
       setIsLoading(false)
     }
   }
 
-  return (
-    <div className="space-y-2">
-      <Button
-        onClick={handleSubscribe}
-        disabled={isLoading}
-        className={className}
-        size="lg"
-      >
-        {isLoading
-          ? 'Loading...'
-          : planName === 'Free Trial'
-          ? 'Go to Dashboard'
-          : 'Subscribe Now'
-        }
+  if (!planId) {
+    return (
+      <Button className={className} onClick={handleSubscribe} disabled={isLoading}>
+        {isLoading ? (
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+        ) : (
+          <Crown className="mr-2 h-4 w-4" />
+        )}
+        Start Free Trial
       </Button>
-      {error && (
-        <p className="text-sm text-red-600 text-center">{error}</p>
+    )
+  }
+
+  return (
+    <Button className={className} onClick={handleSubscribe} disabled={isLoading}>
+      {isLoading ? (
+        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+      ) : (
+        <Crown className="mr-2 h-4 w-4" />
       )}
-    </div>
+      Upgrade to {planName}
+    </Button>
   )
 }
