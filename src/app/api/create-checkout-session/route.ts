@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth, currentUser } from '@clerk/nextjs/server'
 import { stripe } from '@/lib/stripe-server'
+import type Stripe from 'stripe'
 
 export async function POST(request: NextRequest) {
   try {
@@ -20,10 +21,36 @@ export async function POST(request: NextRequest) {
       clerkPlanId
     })
 
+    // Build line items based on whether we have a price ID
+    const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = planId
+      ? [
+          {
+            price: planId,
+            quantity: 1,
+          },
+        ]
+      : [
+          {
+            price_data: {
+              currency: 'usd',
+              product_data: {
+                name: 'YouTube Music Downloader Pro',
+                description: 'Unlimited downloads, premium features, and priority support',
+              },
+              unit_amount: 999, // $9.99 in cents
+              recurring: {
+                interval: 'month',
+              },
+            },
+            quantity: 1,
+          },
+        ]
+
     // Configure Stripe checkout session
-    const sessionConfig: any = {
+    const sessionConfig: Stripe.Checkout.SessionCreateParams = {
       payment_method_types: ['card'],
       mode: 'subscription',
+      line_items: lineItems,
       success_url: `${request.nextUrl.origin}/dashboard?success=true&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${request.nextUrl.origin}/pricing?canceled=true`,
       customer_email: user?.emailAddresses[0]?.emailAddress,
@@ -31,34 +58,6 @@ export async function POST(request: NextRequest) {
         userId,
         clerkPlanId: clerkPlanId || '',
       },
-    }
-
-    if (planId) {
-      // Use existing price ID
-      sessionConfig.line_items = [
-        {
-          price: planId,
-          quantity: 1,
-        },
-      ]
-    } else {
-      // Create price on the fly for testing
-      sessionConfig.line_items = [
-        {
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: 'YouTube Music Downloader Pro',
-              description: 'Unlimited downloads, premium features, and priority support',
-            },
-            unit_amount: 999, // $9.99 in cents
-            recurring: {
-              interval: 'month',
-            },
-          },
-          quantity: 1,
-        },
-      ]
     }
 
     const session = await stripe.checkout.sessions.create(sessionConfig)
