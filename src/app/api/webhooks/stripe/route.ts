@@ -4,7 +4,7 @@ import Stripe from 'stripe'
 import { clerkClient } from '@clerk/nextjs/server'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2024-12-18.acacia',
+  apiVersion: '2024-10-28.acacia',
 })
 
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!
@@ -37,7 +37,8 @@ export async function POST(request: NextRequest) {
 
           if (userId) {
             // Update user metadata in Clerk
-            await clerkClient.users.updateUserMetadata(userId, {
+            const client = await clerkClient()
+            await client.users.updateUserMetadata(userId, {
               publicMetadata: {
                 stripeSubscriptionId: subscriptionId,
                 subscriptionStatus: 'active',
@@ -53,7 +54,8 @@ export async function POST(request: NextRequest) {
         const subscription = event.data.object as Stripe.Subscription
 
         // Find user by subscription ID
-        const users = await clerkClient.users.getUserList({
+        const client = await clerkClient()
+        const users = await client.users.getUserList({
           limit: 100,
         })
 
@@ -62,7 +64,7 @@ export async function POST(request: NextRequest) {
         )
 
         if (user) {
-          await clerkClient.users.updateUserMetadata(user.id, {
+          await client.users.updateUserMetadata(user.id, {
             publicMetadata: {
               ...user.publicMetadata,
               subscriptionStatus: subscription.status,
@@ -76,7 +78,8 @@ export async function POST(request: NextRequest) {
         const subscription = event.data.object as Stripe.Subscription
 
         // Find user by subscription ID
-        const users = await clerkClient.users.getUserList({
+        const client = await clerkClient()
+        const users = await client.users.getUserList({
           limit: 100,
         })
 
@@ -85,7 +88,7 @@ export async function POST(request: NextRequest) {
         )
 
         if (user) {
-          await clerkClient.users.updateUserMetadata(user.id, {
+          await client.users.updateUserMetadata(user.id, {
             publicMetadata: {
               ...user.publicMetadata,
               subscriptionStatus: 'canceled',

@@ -55,7 +55,9 @@ export function canUserDownload(subscription: UserSubscription): boolean {
     return true
   }
 
-  return subscription.downloadsUsed < subscription.downloadsLimit
+  return typeof subscription.downloadsLimit === 'string'
+    ? true // unlimited
+    : subscription.downloadsUsed < subscription.downloadsLimit
 }
 
 // Function to get subscription status message
@@ -65,7 +67,10 @@ export function getSubscriptionMessage(subscription: UserSubscription): string {
   }
 
   if (subscription.canDownload) {
-    return `You have ${subscription.downloadsLimit - subscription.downloadsUsed} free download remaining`
+    const remaining = typeof subscription.downloadsLimit === 'string'
+      ? 'unlimited'
+      : subscription.downloadsLimit - subscription.downloadsUsed
+    return `You have ${remaining} download${remaining === 1 ? '' : 's'} remaining`
   }
 
   return "You've used your free download. Upgrade to Pro for unlimited downloads!"
