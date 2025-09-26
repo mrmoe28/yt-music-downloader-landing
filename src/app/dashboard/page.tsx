@@ -163,8 +163,9 @@ export default async function DashboardPage() {
                 </div>
                 <div className="mt-6 pt-6 border-t border-gray-200">
                   <SubscribeButton
-                    planId="cplan_33EvIiC4CnraLtwa36h5YsbVWy2"
+                    planId="price_1QnGd2EUI4iqGSxZ0KQzgx5l"
                     planName="Pro"
+                    clerkPlanId="cplan_33EvIiC4CnraLtwa36h5YsbVWy2"
                     className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
                   />
                 </div>
