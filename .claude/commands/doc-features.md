@@ -17,6 +17,7 @@ YouTube Music Downloader Pro is a professional-grade desktop application suite d
 ### Core Download Functionality
 
 #### YouTube Music Processing
+
 - **URL Validation**: Automatic validation of YouTube URLs (youtube.com, youtu.be)
 - **Metadata Extraction**: Comprehensive video information retrieval including:
   - Title and description
@@ -27,6 +28,7 @@ YouTube Music Downloader Pro is a professional-grade desktop application suite d
 - **Error Handling**: Comprehensive error reporting and retry mechanisms
 
 #### Audio Quality Options
+
 - **320kbps MP3**: High-quality audio with balanced file size
 - **256kbps MP3**: Good quality with smaller file size
 - **FLAC**: Lossless audio format for audiophiles
@@ -34,6 +36,7 @@ YouTube Music Downloader Pro is a professional-grade desktop application suite d
 - **Smart File Naming**: Automatic file organization and naming
 
 #### Download Management
+
 - **Progress Tracking**: Real-time download progress with speed and ETA
 - **Batch Downloads**: Support for multiple simultaneous downloads
 - **Download History**: Track completed downloads with file paths
@@ -43,6 +46,7 @@ YouTube Music Downloader Pro is a professional-grade desktop application suite d
 ### User Interface Features
 
 #### Modern Design System
+
 - **Dark/Light Theme**: Toggle between dark and light modes
 - **Responsive Layout**: Adapts to different screen sizes
 - **Card-based Interface**: Clean, organized layout with intuitive navigation
@@ -50,6 +54,7 @@ YouTube Music Downloader Pro is a professional-grade desktop application suite d
 - **Professional Branding**: Consistent UI across all platforms
 
 #### User Experience
+
 - **Drag & Drop**: Support for URL input via drag and drop
 - **Keyboard Shortcuts**: Enter key for quick URL processing
 - **Visual Feedback**: Loading states, progress bars, and status icons
@@ -59,12 +64,14 @@ YouTube Music Downloader Pro is a professional-grade desktop application suite d
 ### File Management & USB Integration
 
 #### Output Configuration
+
 - **Custom Output Folders**: User-selectable download destinations
 - **Folder Browser**: Native file system dialog integration
 - **Path Validation**: Automatic path validation and error handling
 - **Default Locations**: Smart default folder selection
 
 #### USB Drive Integration
+
 - **Automatic Detection**: Cross-platform USB drive detection
 - **Drive Information**: Display drive names, paths, and capacity
 - **One-click Transfer**: Direct file copying to USB drives
@@ -74,12 +81,14 @@ YouTube Music Downloader Pro is a professional-grade desktop application suite d
 ### Subscription System Integration
 
 #### Free Trial Features
+
 - **Limited Downloads**: Free users get 1 download per trial
 - **Usage Tracking**: Real-time download count monitoring
 - **Upgrade Prompts**: Contextual upgrade suggestions
 - **Feature Restrictions**: Quality and batch download limitations
 
 #### Pro Features
+
 - **Unlimited Downloads**: No download limits for Pro users
 - **Premium Quality**: Access to FLAC and highest MP3 quality
 - **Priority Processing**: Faster download processing
@@ -93,12 +102,14 @@ YouTube Music Downloader Pro is a professional-grade desktop application suite d
 ### Marketing Website
 
 #### Hero Section
+
 - **Compelling Headlines**: Clear value proposition messaging
 - **Feature Highlights**: Key benefits and capabilities
 - **Call-to-Action**: Prominent sign-up and download buttons
 - **Trust Indicators**: Security and quality badges
 
 #### Feature Showcase
+
 - **Comprehensive Feature List**: Detailed feature descriptions
 - **Visual Icons**: Lucide React icons for visual appeal
 - **Badge System**: Feature categorization and highlighting
@@ -107,6 +118,7 @@ YouTube Music Downloader Pro is a professional-grade desktop application suite d
 ### Authentication System
 
 #### Clerk Integration
+
 - **OAuth Providers**: Google and GitHub authentication
 - **User Management**: Profile creation and management
 - **Session Handling**: Secure session management
@@ -114,6 +126,7 @@ YouTube Music Downloader Pro is a professional-grade desktop application suite d
 - **Billing Settings**: [Clerk Dashboard Billing](https://dashboard.clerk.com/apps/app_33EtqRfd4sqcEtxasoIHCTZvz5L/instances/ins_33EtqQg3PCXuWqDRpprApgZp1IB/billing/settings)
 
 #### User Dashboard
+
 - **Usage Statistics**: Download count and limits display
 - **Subscription Status**: Current plan and features overview
 - **Download History**: Recent activity tracking
@@ -122,12 +135,14 @@ YouTube Music Downloader Pro is a professional-grade desktop application suite d
 ### Subscription Management
 
 #### Stripe Integration
+
 - **Payment Processing**: Secure payment handling
 - **Subscription Plans**: Multiple pricing tiers
 - **Webhook Handling**: Real-time subscription updates
 - **Invoice Management**: Automatic billing and receipts
 
 #### Pricing Tiers
+
 - **Free Trial**: 1 download with basic features
 - **Pro Plan**: Unlimited downloads with premium features ($9.99/month)
 - **Feature Comparison**: Side-by-side plan comparison
@@ -140,6 +155,7 @@ YouTube Music Downloader Pro is a professional-grade desktop application suite d
 ### Technology Stack
 
 #### Frontend Technologies
+
 - **React 18+**: Modern React with hooks and functional components
 - **TypeScript**: Type-safe development with comprehensive interfaces
 - **Tailwind CSS**: Utility-first CSS framework for styling
@@ -147,6 +163,7 @@ YouTube Music Downloader Pro is a professional-grade desktop application suite d
 - **Vite**: Fast build tool and development server
 
 #### Backend Technologies
+
 - **Rust (Tauri)**: High-performance system programming
 - **Node.js (Electron)**: JavaScript runtime for desktop apps
 - **Next.js 15**: React framework with App Router
@@ -154,6 +171,7 @@ YouTube Music Downloader Pro is a professional-grade desktop application suite d
 - **Stripe**: Payment processing and subscription management
 
 #### Build Tools
+
 - **electron-builder**: Electron app packaging and distribution
 - **Tauri CLI**: Tauri app building and bundling
 - **Vite**: Frontend build tool and bundler
@@ -162,6 +180,7 @@ YouTube Music Downloader Pro is a professional-grade desktop application suite d
 ### Key Dependencies
 
 #### Core Dependencies
+
 - **yt-dlp**: YouTube video downloading and processing
 - **uuid**: Unique identifier generation
 - **electron-store**: Persistent data storage
@@ -169,6 +188,7 @@ YouTube Music Downloader Pro is a professional-grade desktop application suite d
 - **serde**: Serialization and deserialization
 
 #### UI Dependencies
+
 - **@radix-ui**: Accessible UI component primitives
 - **class-variance-authority**: Component variant management
 - **clsx**: Conditional class name utility
@@ -177,12 +197,14 @@ YouTube Music Downloader Pro is a professional-grade desktop application suite d
 ### Security Features
 
 #### Data Protection
+
 - **No Data Collection**: No personal data stored or transmitted
 - **Local Processing**: All downloads processed locally
 - **Secure Communication**: HTTPS for all API communications
 - **Privacy First**: No tracking or analytics
 
 #### Application Security
+
 - **Sandboxed Execution**: Restricted system access (Tauri)
 - **Context Isolation**: Secure IPC communication (Electron)
 - **Input Validation**: Comprehensive input sanitization
@@ -195,6 +217,7 @@ YouTube Music Downloader Pro is a professional-grade desktop application suite d
 ### Development Commands
 
 #### Tauri App
+
 ```bash
 npm run dev              # Start frontend dev server (localhost:1420)
 npm run tauri dev        # Start Tauri development mode
@@ -203,6 +226,7 @@ npm run tauri build      # Build desktop app bundles
 ```
 
 #### Electron App
+
 ```bash
 npm run dev              # Start development with hot reload
 npm run dev:renderer     # Start renderer dev server only (localhost:3000)
@@ -211,6 +235,7 @@ npm run dist           # Create distributable packages
 ```
 
 #### Landing Page
+
 ```bash
 npm run dev             # Start development server (localhost:3000)
 npm run build           # Standard Next.js build (full server functionality)
@@ -220,11 +245,13 @@ npm start              # Start production server
 ```
 
 **Build Modes:**
+
 - **Standard Build** (`npm run build`): Full Next.js functionality with server-side features
 - **GitHub Pages Build** (`npm run build:github`): Static export with GitHub Pages base path
 - **Static Export Build** (`npm run build:static`): Static export for general static hosting
 
 **Static Export Features:**
+
 - Generates static HTML/CSS/JS files in the `out` directory
 - Compatible with GitHub Pages, Netlify, and other static hosting services
 - Demo mode UI for features requiring server-side functionality
@@ -233,21 +260,24 @@ npm start              # Start production server
 ### Build and Distribution
 
 #### Desktop App Distribution
+
 - **Tauri**: Creates native bundles for macOS (.app, .dmg), Windows (.exe, .msi), Linux (.deb, .appimage)
 - **Electron**: Uses electron-builder for cross-platform distribution
 - **Code Signing**: Automatic code signing for macOS and Windows
 - **Auto-updater**: Built-in update mechanism for both platforms
 
 #### Landing Page Deployment
+
 - **Vercel**: Automatic deployment from GitHub
 - **GitHub Pages**: Static export for GitHub Pages hosting
 - **Environment Variables**: Secure configuration management
 - **CDN Integration**: Global content delivery network
 
 #### Next.js Static Export Configuration
+
 - **Static Export Mode**: Configured with `output: 'export'` in next.config.js
 - **Build Process**: Generates HTML/CSS/JS assets in `out` folder during `next build`
-- **Environment-Based Configuration**: 
+- **Environment-Based Configuration**:
   - `GITHUB_PAGES=true` for GitHub Pages deployment
   - `STATIC_EXPORT=true` for general static hosting
 - **Supported Features**:
@@ -275,6 +305,7 @@ npm start              # Start production server
 ## 📊 Current Status & Features
 
 ### Completed Features ✅
+
 - **Basic YouTube music downloading functionality**
 - **Multiple audio quality options (MP3, FLAC)**
 - **USB drive detection and file transfer**
@@ -287,12 +318,14 @@ npm start              # Start production server
 - **Professional UI/UX design**
 
 ### In Progress 🔄
+
 - **Enhanced error handling and user feedback**
 - **Performance optimizations**
 - **Additional metadata extraction**
 - **Batch download queue management**
 
 ### Future Enhancements 📋
+
 - **Playlist download support**
 - **Cloud storage integration**
 - **Mobile companion apps**
@@ -304,18 +337,21 @@ npm start              # Start production server
 ## 🎯 Key Differentiators
 
 ### Performance
+
 - **Native Performance**: Rust backend for optimal speed (Tauri)
 - **Lightweight**: Minimal resource footprint
 - **Fast Processing**: Optimized download and conversion speeds
 - **Efficient Memory Usage**: Smart resource management
 
-### User Experience
+### User Experience Design
+
 - **Intuitive Interface**: Easy-to-use design for all skill levels
 - **Cross-platform**: Consistent experience across all devices
 - **Professional Quality**: High-quality audio output
 - **Reliable Service**: Robust error handling and recovery
 
 ### Business Model
+
 - **Freemium Approach**: Free trial with premium upgrade path
 - **Transparent Pricing**: Clear, simple pricing structure
 - **No Hidden Fees**: Upfront pricing with no surprises
@@ -328,6 +364,7 @@ npm start              # Start production server
 ### Environment Variables
 
 #### Landing Page Required
+
 ```bash
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
 CLERK_SECRET_KEY=sk_test_...
@@ -338,6 +375,7 @@ GITHUB_PAGES=true  # For static export builds
 ```
 
 #### Desktop Apps
+
 - **No special environment variables required**
 - **yt-dlp must be installed** on the system
 - **Rust toolchain required** for Tauri development
@@ -345,12 +383,14 @@ GITHUB_PAGES=true  # For static export builds
 ### System Requirements
 
 #### Desktop Applications
+
 - **Operating System**: Windows 10+, macOS 10.15+, or Linux
 - **Memory**: 4GB RAM minimum, 8GB recommended
 - **Storage**: 100MB for application, additional space for downloads
 - **Internet**: Required for YouTube access and subscription verification
 
-#### Landing Page
+#### Landing Page Requirements
+
 - **Modern Browser**: Chrome, Firefox, Safari, or Edge
 - **JavaScript**: Enabled for full functionality
 - **Internet**: Required for authentication and payments
@@ -360,12 +400,14 @@ GITHUB_PAGES=true  # For static export builds
 ## 📈 Success Metrics
 
 ### User Engagement
+
 - **Download Success Rate**: 99%+ successful downloads
 - **User Retention**: High subscription conversion rates
 - **Cross-platform Usage**: Consistent adoption across platforms
 - **Customer Satisfaction**: Positive user feedback and reviews
 
 ### Technical Performance
+
 - **Download Speed**: Fast processing times
 - **Application Stability**: Minimal crashes or errors
 - **Resource Usage**: Efficient memory and CPU utilization
@@ -380,6 +422,7 @@ YouTube Music Downloader Pro represents a comprehensive solution for YouTube mus
 The application successfully combines powerful backend processing with intuitive frontend design, providing users with a seamless experience for downloading and managing their music library. The subscription model ensures sustainable development while offering both free and premium tiers to accommodate different user needs.
 
 **Key Strengths:**
+
 - **Professional Quality**: High-quality audio output with metadata preservation
 - **Cross-platform**: Native apps for all major operating systems
 - **User-friendly**: Intuitive interface with comprehensive error handling
