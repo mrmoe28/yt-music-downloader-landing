@@ -1,0 +1,4 @@
+owner: your-github-username
+repo: youtube-music-downloader-pro
+provider: github
+updaterCacheDirName: youtube-music-downloader-pro-updater
