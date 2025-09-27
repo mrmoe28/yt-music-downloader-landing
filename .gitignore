@@ -10,6 +10,12 @@
 !.yarn/releases
 !.yarn/versions
 
+# Exclude all node_modules directories
+**/node_modules/
+yt-music-downloader-app/tauri-project/node_modules/
+yt-music-downloader-electron/node_modules/
+yt-music-downloader-electron/renderer/node_modules/
+
 # testing
 /coverage
 
