@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { invoke } from '@tauri-apps/api/core';
 import { listen } from '@tauri-apps/api/event';
 import {
@@ -246,7 +246,7 @@ function App() {
             </div>
             <button
               onClick={handleGetVideoInfo}
-              disabled={isLoadingInfo || !url.trim() || (url && !url.includes('youtube.com') && !url.includes('youtu.be'))}
+              disabled={isLoadingInfo || !url.trim() || Boolean(url && !url.includes('youtube.com') && !url.includes('youtu.be'))}
               className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 transition-all duration-200 min-w-[120px]"
             >
               {isLoadingInfo ? (
