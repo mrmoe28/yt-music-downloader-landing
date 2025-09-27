@@ -21,11 +21,19 @@ export async function detectDesktopApp(): Promise<boolean> {
     iframe.style.display = 'none';
     document.body.appendChild(iframe);
 
-    // Set a timeout to clean up and resolve
-    const timeout = setTimeout(() => {
+    const cleanup = () => {
       document.body.removeChild(iframe);
       resolve(detected);
-    }, 2000);
+    };
+
+    // Set a timeout to clean up and resolve
+    const timeoutId = setTimeout(cleanup, 2000);
+
+    const handleDetection = () => {
+      detected = true;
+      clearTimeout(timeoutId);
+      cleanup();
+    };
 
     // Try to detect the protocol
     try {
@@ -34,20 +42,21 @@ export async function detectDesktopApp(): Promise<boolean> {
 
       // If the protocol is registered, the browser will attempt to launch it
       // We can detect this through various browser behaviors
-      window.addEventListener('blur', () => {
-        detected = true;
-      }, { once: true });
+      window.addEventListener('blur', handleDetection, { once: true });
 
       // For some browsers, we can detect through visibility change
       document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
-          detected = true;
+          handleDetection();
         }
       }, { once: true });
 
     } catch (e) {
       // Protocol not registered
       console.error('Protocol detection error:', e);
+      clearTimeout(timeoutId);
+      document.body.removeChild(iframe);
+      resolve(false);
     }
   });
 }

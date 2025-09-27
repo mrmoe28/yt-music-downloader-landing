@@ -18,6 +18,9 @@ const eslintConfig = [
       "out/**",
       "build/**",
       "next-env.d.ts",
+      // Exclude other desktop app projects that are not part of the landing page
+      "yt-music-downloader-app/**",
+      "yt-music-downloader-electron/**",
     ],
   },
 ];

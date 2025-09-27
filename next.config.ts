@@ -4,35 +4,29 @@ const isGitHubPages = process.env.GITHUB_PAGES === "true";
 const isStaticExport = process.env.STATIC_EXPORT === "true";
 
 const nextConfig: NextConfig = {
-  // Static export configuration for GitHub Pages and other static hosts
-  ...((isGitHubPages || isStaticExport) && {
-    output: "export",
-    basePath: isGitHubPages ? "/yt-music-downloader-landing" : "",
-    trailingSlash: true,
-    images: {
-      unoptimized: true
-    },
-    // Disable features incompatible with static export
-    experimental: {
-      // Disable middleware for static export
-      middlewareSourceMaps: false,
-    }
-  }),
-  // For Vercel deployment (production), enable full Next.js functionality
-  ...(!isGitHubPages && !isStaticExport && {
-    images: {
-      domains: [], // Add your image domains here
-      formats: ['image/webp', 'image/avif'],
-    }
-  }),
+  // Limit Next.js to this project directory only
+  outputFileTracingRoot: __dirname,
   typescript: {
     ignoreBuildErrors: false,
   },
   eslint: {
     ignoreDuringBuilds: false,
   },
-  // Enable typed routes for better type safety (disabled for now due to route conflicts)
-  // typedRoutes: true,
+  // Static export configuration for GitHub Pages and other static hosts
+  ...(isGitHubPages || isStaticExport ? {
+    output: "export",
+    basePath: isGitHubPages ? "/yt-music-downloader-landing" : "",
+    trailingSlash: true,
+    images: {
+      unoptimized: true
+    }
+  } : {
+    // For Vercel deployment (production), enable full Next.js functionality
+    images: {
+      remotePatterns: [], // Use remotePatterns instead of domains for Next.js 15
+      formats: ['image/webp', 'image/avif'],
+    }
+  })
 };
 
 export default nextConfig;
