@@ -213,10 +213,16 @@ npm run dist           # Create distributable packages
 #### Landing Page
 ```bash
 npm run dev             # Start development server (localhost:3000)
-npm run build           # Standard Next.js build
-npm run build:github    # Build for GitHub Pages deployment
+npm run build           # Standard Next.js build (generates static export in 'out' folder)
+npm run build:github    # Build for GitHub Pages deployment (static export)
 npm start              # Start production server
 ```
+
+**Static Export Notes:**
+- The landing page uses Next.js static export mode (`output: 'export'`)
+- Build process generates static HTML/CSS/JS files in the `out` directory
+- Compatible with GitHub Pages, Netlify, and other static hosting services
+- No server-side features are used to ensure static export compatibility
 
 ### Build and Distribution
 
@@ -231,6 +237,24 @@ npm start              # Start production server
 - **GitHub Pages**: Static export for GitHub Pages hosting
 - **Environment Variables**: Secure configuration management
 - **CDN Integration**: Global content delivery network
+
+#### Next.js Static Export Configuration
+- **Static Export Mode**: Configured with `output: 'export'` in next.config.js
+- **Build Process**: Generates HTML/CSS/JS assets in `out` folder during `next build`
+- **Supported Features**:
+  - Server Components (rendered during build)
+  - Client Components with client-side data fetching
+  - Image Optimization with custom loaders
+  - Route Handlers (GET only, static responses)
+  - Browser APIs (accessed safely in useEffect)
+- **Unsupported Features** (as per [Next.js documentation](https://nextjs.org/docs/app/guides/static-exports#unsupported-features)):
+  - Dynamic Routes without `generateStaticParams()`
+  - Route Handlers that rely on Request objects
+  - Cookies, Rewrites, Redirects, Headers
+  - Middleware and Server Actions
+  - Incremental Static Regeneration
+  - Image Optimization with default loader
+  - Draft Mode and Intercepting Routes
 
 ---
 
