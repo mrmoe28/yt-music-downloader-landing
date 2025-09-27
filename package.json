@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:github": "mv src/middleware.ts src/middleware.ts.bak && GITHUB_PAGES=true next build && mv src/middleware.ts.bak src/middleware.ts",
+    "build:github": "GITHUB_PAGES=true next build",
+    "build:static": "STATIC_EXPORT=true next build",
     "start": "next start",
     "lint": "eslint"
   },

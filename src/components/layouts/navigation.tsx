@@ -11,6 +11,7 @@ export default function Navigation() {
   const navigation = [
     { name: 'Features', href: '#features' },
     { name: 'Pricing', href: '/pricing' },
+    { name: 'Billing', href: '/billing' },
     { name: 'Support', href: '#support' },
   ]
 

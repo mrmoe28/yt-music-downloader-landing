@@ -1,11 +1,13 @@
 'use client'
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Download, Crown, Loader2, CheckCircle, AlertCircle, Music } from "lucide-react"
+import { Download, Crown, Loader2, CheckCircle, AlertCircle, Music, Monitor } from "lucide-react"
+import { detectDesktopApp, launchWithAuth } from "@/lib/protocol"
+import { useUser } from "@clerk/nextjs"
 
 interface DownloadResult {
   id: string
@@ -18,16 +20,37 @@ interface DownloadResult {
 }
 
 export default function DownloadForm() {
+  const { user } = useUser()
   const [url, setUrl] = useState("")
   const [isDownloading, setIsDownloading] = useState(false)
   const [downloadResult, setDownloadResult] = useState<DownloadResult | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [hasDesktopApp, setHasDesktopApp] = useState(false)
+  const [checkingApp, setCheckingApp] = useState(true)
 
   // Mock user subscription data - replace with actual subscription logic
   const userPlan = "free" as const // This would come from Clerk metadata
   const downloadsUsed = 0 // This would come from your database
   const downloadsLimit = userPlan === "free" ? 1 : "unlimited"
   const canDownload = userPlan !== "free" || downloadsUsed < 1
+
+  // Check for desktop app on mount
+  useEffect(() => {
+    const checkForDesktopApp = async () => {
+      setCheckingApp(true)
+      try {
+        const detected = await detectDesktopApp()
+        setHasDesktopApp(detected)
+      } catch (err) {
+        console.error('Failed to detect desktop app:', err)
+        setHasDesktopApp(false)
+      } finally {
+        setCheckingApp(false)
+      }
+    }
+
+    checkForDesktopApp()
+  }, [])
 
   const handleDownload = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -44,6 +67,30 @@ export default function DownloadForm() {
       return
     }
 
+    // If desktop app is installed and user is authenticated, launch it
+    if (hasDesktopApp && user) {
+      try {
+        const launched = await launchWithAuth(user.id, url.trim())
+        if (launched) {
+          setUrl("") // Clear the input
+          setDownloadResult({
+            id: 'desktop-launch',
+            title: 'Launched in Desktop App',
+            duration: '',
+            quality: '320kbps',
+            size: '',
+            downloadUrl: '',
+            status: 'The download is being processed in your desktop app'
+          })
+          return
+        }
+      } catch (err) {
+        console.error('Failed to launch desktop app:', err)
+        // Fall back to web download
+      }
+    }
+
+    // Web-based download fallback
     setIsDownloading(true)
 
     try {
@@ -113,8 +160,17 @@ export default function DownloadForm() {
                   </>
                 ) : (
                   <>
-                    <Download className="mr-2 h-4 w-4" />
-                    Download MP3
+                    {hasDesktopApp ? (
+                      <>
+                        <Monitor className="mr-2 h-4 w-4" />
+                        Open in App
+                      </>
+                    ) : (
+                      <>
+                        <Download className="mr-2 h-4 w-4" />
+                        Download MP3
+                      </>
+                    )}
                   </>
                 )}
               </Button>
@@ -156,24 +212,34 @@ export default function DownloadForm() {
             <div className="p-4 bg-green-50 border border-green-200 rounded-md">
               <div className="flex items-center mb-2">
                 <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
-                <span className="font-medium text-green-800">Download Ready!</span>
+                <span className="font-medium text-green-800">
+                  {downloadResult.id === 'desktop-launch' ? 'Launched Desktop App!' : 'Download Ready!'}
+                </span>
               </div>
-              <div className="space-y-2 text-sm">
-                <div><strong>Title:</strong> {downloadResult.title}</div>
-                <div><strong>Duration:</strong> {downloadResult.duration}</div>
-                <div><strong>Quality:</strong> {downloadResult.quality}</div>
-                <div><strong>Size:</strong> {downloadResult.size}</div>
-              </div>
-              <Button
-                className="mt-3 bg-green-600 hover:bg-green-700"
-                size="sm"
-                asChild
-              >
-                <a href={downloadResult.downloadUrl} download>
-                  <Download className="mr-2 h-4 w-4" />
-                  Download File
-                </a>
-              </Button>
+              {downloadResult.id === 'desktop-launch' ? (
+                <div className="text-sm text-green-700">
+                  {downloadResult.status}
+                </div>
+              ) : (
+                <>
+                  <div className="space-y-2 text-sm">
+                    <div><strong>Title:</strong> {downloadResult.title}</div>
+                    <div><strong>Duration:</strong> {downloadResult.duration}</div>
+                    <div><strong>Quality:</strong> {downloadResult.quality}</div>
+                    <div><strong>Size:</strong> {downloadResult.size}</div>
+                  </div>
+                  <Button
+                    className="mt-3 bg-green-600 hover:bg-green-700"
+                    size="sm"
+                    asChild
+                  >
+                    <a href={downloadResult.downloadUrl} download>
+                      <Download className="mr-2 h-4 w-4" />
+                      Download File
+                    </a>
+                  </Button>
+                </>
+              )}
             </div>
           )}
 
@@ -205,6 +271,43 @@ export default function DownloadForm() {
         </CardContent>
       </Card>
 
+      {/* Desktop App Status */}
+      {!checkingApp && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg flex items-center">
+              <Monitor className="mr-2 h-5 w-5" />
+              Desktop App {hasDesktopApp ? 'Detected' : 'Not Found'}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {hasDesktopApp ? (
+              <div className="text-sm text-green-700">
+                ✓ Desktop app is installed. Downloads will open directly in the app.
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <div className="text-sm text-gray-600">
+                  Install the desktop app for a better download experience:
+                </div>
+                <ul className="text-sm text-gray-600 ml-4 space-y-1">
+                  <li>• Faster downloads</li>
+                  <li>• Direct file management</li>
+                  <li>• USB drive integration</li>
+                  <li>• Works offline</li>
+                </ul>
+                <Button size="sm" variant="outline" asChild>
+                  <a href="https://github.com/mrmoe28/ytmusidownloaderapp/releases" target="_blank" rel="noopener noreferrer">
+                    <Download className="mr-2 h-4 w-4" />
+                    Download Desktop App
+                  </a>
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
       {/* Instructions */}
       <Card>
         <CardHeader>
@@ -213,9 +316,15 @@ export default function DownloadForm() {
         <CardContent className="space-y-2 text-sm text-gray-600">
           <div>1. Copy any YouTube music video URL</div>
           <div>2. Paste it in the input field above</div>
-          <div>3. Click &quot;Download MP3&quot; to start processing</div>
-          <div>4. Wait for the download to complete</div>
-          <div>5. Click &quot;Download File&quot; to save to your device</div>
+          <div>3. Click &quot;{hasDesktopApp ? 'Open in App' : 'Download MP3'}&quot; to start processing</div>
+          {hasDesktopApp ? (
+            <div>4. The desktop app will handle the download</div>
+          ) : (
+            <>
+              <div>4. Wait for the download to complete</div>
+              <div>5. Click &quot;Download File&quot; to save to your device</div>
+            </>
+          )}
         </CardContent>
       </Card>
     </div>

@@ -3,12 +3,78 @@ import { redirect } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Download, Music, Clock, Crown, User, Settings } from "lucide-react"
+import { Download, Music, Clock, Crown, User, Settings, AlertTriangle } from "lucide-react"
 import DownloadForm from "@/components/download/download-form"
 import { getUserSubscription, getUsageLimit } from "@/lib/subscription"
 import SubscribeButton from "@/components/ui/subscribe-button"
 
 export default async function DashboardPage() {
+  // Check if we're in static export mode
+  const isStaticExport = process.env.STATIC_EXPORT === "true" || process.env.GITHUB_PAGES === "true"
+  
+  // For static export, show a different UI
+  if (isStaticExport) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="bg-white border-b border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center py-6">
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">
+                  YouTube Music Downloader Pro
+                </h1>
+                <p className="text-gray-600">
+                  Static Demo Version
+                </p>
+              </div>
+              <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
+                <AlertTriangle className="mr-1 h-3 w-3" />
+                Demo Mode
+              </Badge>
+            </div>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <AlertTriangle className="mr-2 h-5 w-5 text-yellow-600" />
+                Static Export Demo
+              </CardTitle>
+              <CardDescription>
+                This is a static export version of the application
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <p className="text-gray-600">
+                  This demo version is built for static hosting (GitHub Pages, Netlify, etc.) 
+                  and has limited functionality compared to the full version.
+                </p>
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <h4 className="font-semibold text-blue-900 mb-2">For Full Functionality:</h4>
+                  <ul className="text-sm text-blue-800 space-y-1">
+                    <li>• Deploy to Vercel for server-side features</li>
+                    <li>• Authentication and user management</li>
+                    <li>• Stripe payment processing</li>
+                    <li>• Real download functionality</li>
+                  </ul>
+                </div>
+                <Button asChild className="w-full">
+                  <a href="/pricing">
+                    <Crown className="mr-2 h-4 w-4" />
+                    View Pricing Plans
+                  </a>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    )
+  }
+
   const { userId } = await auth()
   const user = await currentUser()
 

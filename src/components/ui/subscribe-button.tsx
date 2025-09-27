@@ -29,6 +29,8 @@ export default function SubscribeButton({
     setIsLoading(true)
 
     try {
+      console.log('🚀 Subscribe button clicked with:', { planId, planName, clerkPlanId })
+
       // Create Stripe checkout session
       const response = await fetch('/api/create-checkout-session', {
         method: 'POST',
